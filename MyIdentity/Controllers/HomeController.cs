@@ -10,7 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using MyIdentity.ViewModels;
 
-namespace WebApplication1.Controllers
+namespace MyIdentity.Controllers
 {
     public class HomeController : Controller
     {
@@ -25,29 +25,23 @@ namespace WebApplication1.Controllers
             // UserStore and UserManager manages data retreival.
             UserStore<IdentityUser> userStore = new UserStore<IdentityUser>();
             UserManager<IdentityUser> manager = new UserManager<IdentityUser>(userStore);
-            IdentityUser identityUser = manager.Find(login.UserName,
-                                                             login.Password);
+            IdentityUser identityUser = manager.Find(login.myUser, login.Password);
 
             if (ModelState.IsValid)
             {
                 if (identityUser != null)
                 {
-                    IAuthenticationManager authenticationManager
-                                           = HttpContext.GetOwinContext().Authentication;
-                    authenticationManager
-                   .SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                    IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
+                    authenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
 
                     var identity = new ClaimsIdentity(new[] {
-                                            new Claim(ClaimTypes.Name, login.UserName),
+                                            new Claim(ClaimTypes.Name, login.myUser),
                                         },
                                         DefaultAuthenticationTypes.ApplicationCookie,
                                         ClaimTypes.Name, ClaimTypes.Role);
                     // SignIn() accepts ClaimsIdentity and issues logged in cookie. 
-                    authenticationManager.SignIn(new AuthenticationProperties
-                    {
-                        IsPersistent = false
-                    }, identity);
-                    return RedirectToAction("SecureArea", "Home");
+                    authenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, identity);
+                    return RedirectToAction("Welcome");
                 }
             }
             return View();
@@ -65,24 +59,32 @@ namespace WebApplication1.Controllers
             var manager = new UserManager<IdentityUser>(userStore);
             var identityUser = new IdentityUser()
             {
-                UserName = newUser.UserName,
-                Email = newUser.Email
+                UserName = newUser.myUser,
+                Email = newUser.myEmail,
             };
             IdentityResult result = manager.Create(identityUser, newUser.Password);
 
             if (result.Succeeded)
             {
-                var authenticationManager
-                                  = HttpContext.Request.GetOwinContext().Authentication;
-                var userIdentity = manager.CreateIdentity(identityUser,
-                                           DefaultAuthenticationTypes.ApplicationCookie);
-                authenticationManager.SignIn(new AuthenticationProperties() { },
-                                             userIdentity);
+                var authenticationManager = HttpContext.Request.GetOwinContext().Authentication;
+                var userIdentity = manager.CreateIdentity(identityUser, DefaultAuthenticationTypes.ApplicationCookie);
+                // todo connect to db and add newUser
+                RedirectToAction("Index");
+                //authenticationManager.SignIn(new AuthenticationProperties() { },
+                //                             userIdentity);
+
+
             }
             return View();
         }
         [Authorize]
-        public ActionResult SecureArea()
+        public ActionResult Welcome()
+        {
+            ViewBag.Name = HttpContext.User.Identity.Name;
+            return View();
+        }
+
+        public ActionResult CreateRole()
         {
             return View();
         }
