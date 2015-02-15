@@ -26,8 +26,7 @@ namespace MyIdentity.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=brown.mysitehosted.com;Initial Catalog=MyIdentity;Persist Security In" +
-            "fo=True;User ID=myidentity;Password=myidentity")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=anabell-hp;Initial Catalog=MyIdentity;Integrated Security=True")]
         public string Setting {
             get {
                 return ((string)(this["Setting"]));

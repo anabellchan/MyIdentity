@@ -12,12 +12,15 @@ namespace MyIdentity
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagram
+    public partial class MyUser
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int ID { get; set; }
+        public string myUser1 { get; set; }
+        public string myEmail { get; set; }
+        public string myAddress { get; set; }
+        public string phone { get; set; }
+        public string city { get; set; }
+        public string province { get; set; }
+        public string country { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using MyIdentity.Models;
 using MyIdentity.ViewModels;
 
 namespace MyIdentity.Controllers
@@ -39,6 +40,7 @@ namespace MyIdentity.Controllers
                                         },
                                         DefaultAuthenticationTypes.ApplicationCookie,
                                         ClaimTypes.Name, ClaimTypes.Role);
+
                     // SignIn() accepts ClaimsIdentity and issues logged in cookie. 
                     authenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, identity);
                     return RedirectToAction("Welcome");
@@ -60,7 +62,7 @@ namespace MyIdentity.Controllers
             var identityUser = new IdentityUser()
             {
                 UserName = newUser.UserName,
-                Email = newUser.myEmail,
+                Email = newUser.Email,
             };
             IdentityResult result = manager.Create(identityUser, newUser.Password);
 
@@ -68,7 +70,10 @@ namespace MyIdentity.Controllers
             {
                 var authenticationManager = HttpContext.Request.GetOwinContext().Authentication;
                 var userIdentity = manager.CreateIdentity(identityUser, DefaultAuthenticationTypes.ApplicationCookie);
-                // todo connect to db and add newUser
+                // connect to db and add newUser
+                User user = new User();
+                user.Add(newUser);
+
                 RedirectToAction("Index");
                 //authenticationManager.SignIn(new AuthenticationProperties() { },
                 //                             userIdentity);
@@ -85,46 +90,46 @@ namespace MyIdentity.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult AddRole()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult AddRole(AspNetRole role)
-        {
-            MyIdentityEntities context = new MyIdentityEntities();
-            context.AspNetRoles.Add(role);
-            context.SaveChanges();
-            return View();
-        }
+        //[HttpGet]
+        //public ActionResult AddRole()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public ActionResult AddRole(AspNetRole role)
+        //{
+        //    MyIdentityEntities context = new MyIdentityEntities();
+        //    context.AspNetRoles.Add(role);
+        //    context.SaveChanges();
+        //    return View();
+        //}
 
-        [HttpGet]
-        public ActionResult AddUserToRole()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult AddUserToRole(string userName, string roleName)
-        {
-            MyIdentityEntities context = new MyIdentityEntities();
-            AspNetUser user = context.AspNetUsers
-                             .Where(u => u.UserName == userName).FirstOrDefault();
-            AspNetRole role = context.AspNetRoles
-                             .Where(r => r.Name == roleName).FirstOrDefault();
+        //[HttpGet]
+        //public ActionResult AddUserToRole()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public ActionResult AddUserToRole(string userName, string roleName)
+        //{
+        //    MyIdentityEntities context = new MyIdentityEntities();
+        //    AspNetUser user = context.AspNetUsers
+        //                     .Where(u => u.UserName == userName).FirstOrDefault();
+        //    AspNetRole role = context.AspNetRoles
+        //                     .Where(r => r.Name == roleName).FirstOrDefault();
 
-            user.AspNetRoles.Add(role);
-            context.SaveChanges();
-            return View();
-        }
+        //    user.AspNetRoles.Add(role);
+        //    context.SaveChanges();
+        //    return View();
+        //}
 
-        [Authorize(Roles = "Admin")]
-        // To allow more than one role access use syntax like the following:
-        // [Authorize(Roles="Admin, Staff")]
-        public ActionResult AdminOnly()
-        {
-            return View();
-        }
+        //[Authorize(Roles = "Admin")]
+        //// To allow more than one role access use syntax like the following:
+        //// [Authorize(Roles="Admin, Staff")]
+        //public ActionResult AdminOnly()
+        //{
+        //    return View();
+        //}
 
         public ActionResult Logout()
         {

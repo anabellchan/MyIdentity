@@ -12,22 +12,21 @@ namespace MyIdentity.ViewModels
         [Display(Name = "Email")]
         [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$",
         ErrorMessage = "This is not a valid email address.")]
-        public string myEmail { get; set; }
+        public string Email { get; set; }
 
         [Display(Name = "Street Address")]
-        [DataType(DataType.Text)]
-        public string myAddress { get; set; }
+        public string Address { get; set; }
 
         [Display(Name = "Phone")]
-        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\(?\d{3}\)?-? *\d{3}-? *-?\d{4}$",
+        ErrorMessage = "This is not a valid phone number.")]
         public string Phone { get; set; }
 
         [Display(Name = "City")]
-        [DataType(DataType.Text)]
+
         public string City { get; set; }
 
         [Display(Name = "State / Province")]
-        [DataType(DataType.Text)]
         public string Province { get; set; }
         
         
@@ -35,6 +34,8 @@ namespace MyIdentity.ViewModels
         public string Country { get; set; }
 
         [Required]
+        [StringLength (30, MinimumLength=8, 
+        ErrorMessage="Password has minimum length of 8, maximum of 30")]
         [Display(Name = "Password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

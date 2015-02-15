@@ -18,24 +18,24 @@ namespace MyIdentity
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
         }
-        void Application_PostAuthenticateRequest()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var name = User.Identity.Name; // Get current user name.
+        //void Application_PostAuthenticateRequest()
+        //{
+        //    if (User.Identity.IsAuthenticated)
+        //    {
+        //        var name = User.Identity.Name; // Get current user name.
 
-                MyIdentityEntities context = new MyIdentityEntities();
-                var user = context.AspNetUsers.Where(u => u.UserName == name).FirstOrDefault();
-                IQueryable<string> roleQuery = from u in context.AspNetUsers
-                                               from r in u.AspNetRoles
-                                               where u.UserName == Context.User.Identity.Name
-                                               select r.Name;
-                string[] roles = roleQuery.ToArray();
+        //        MyIdentityEntities context = new MyIdentityEntities();
+        //        var user = context.AspNetUsers.Where(u => u.UserName == name).FirstOrDefault();
+        //        IQueryable<string> roleQuery = from u in context.AspNetUsers
+        //                                       from r in u.AspNetRoles
+        //                                       where u.UserName == Context.User.Identity.Name
+        //                                       select r.Name;
+        //        string[] roles = roleQuery.ToArray();
 
-                HttpContext.Current.User = Thread.CurrentPrincipal =
-                                           new GenericPrincipal(User.Identity, roles);
-            }
-        }
+        //        HttpContext.Current.User = Thread.CurrentPrincipal =
+        //                                   new GenericPrincipal(User.Identity, roles);
+        //    }
+        //}
 
     }
 }
