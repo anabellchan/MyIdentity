@@ -25,7 +25,7 @@ namespace MyIdentity.Controllers
             // UserStore and UserManager manages data retreival.
             UserStore<IdentityUser> userStore = new UserStore<IdentityUser>();
             UserManager<IdentityUser> manager = new UserManager<IdentityUser>(userStore);
-            IdentityUser identityUser = manager.Find(login.myUser, login.Password);
+            IdentityUser identityUser = manager.Find(login.UserName, login.Password);
 
             if (ModelState.IsValid)
             {
@@ -35,7 +35,7 @@ namespace MyIdentity.Controllers
                     authenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
 
                     var identity = new ClaimsIdentity(new[] {
-                                            new Claim(ClaimTypes.Name, login.myUser),
+                                            new Claim(ClaimTypes.Name, login.UserName),
                                         },
                                         DefaultAuthenticationTypes.ApplicationCookie,
                                         ClaimTypes.Name, ClaimTypes.Role);
@@ -59,7 +59,7 @@ namespace MyIdentity.Controllers
             var manager = new UserManager<IdentityUser>(userStore);
             var identityUser = new IdentityUser()
             {
-                UserName = newUser.myUser,
+                UserName = newUser.UserName,
                 Email = newUser.myEmail,
             };
             IdentityResult result = manager.Create(identityUser, newUser.Password);
@@ -84,7 +84,44 @@ namespace MyIdentity.Controllers
             return View();
         }
 
-        public ActionResult CreateRole()
+
+        [HttpGet]
+        public ActionResult AddRole()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddRole(AspNetRole role)
+        {
+            MyIdentityEntities context = new MyIdentityEntities();
+            context.AspNetRoles.Add(role);
+            context.SaveChanges();
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult AddUserToRole()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddUserToRole(string userName, string roleName)
+        {
+            MyIdentityEntities context = new MyIdentityEntities();
+            AspNetUser user = context.AspNetUsers
+                             .Where(u => u.UserName == userName).FirstOrDefault();
+            AspNetRole role = context.AspNetRoles
+                             .Where(r => r.Name == roleName).FirstOrDefault();
+
+            user.AspNetRoles.Add(role);
+            context.SaveChanges();
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        // To allow more than one role access use syntax like the following:
+        // [Authorize(Roles="Admin, Staff")]
+        public ActionResult AdminOnly()
         {
             return View();
         }

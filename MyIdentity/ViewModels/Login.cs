@@ -6,7 +6,7 @@ namespace MyIdentity.ViewModels
     {
         [Required]
         [Display(Name = "User Name")]
-        public string myUser { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
