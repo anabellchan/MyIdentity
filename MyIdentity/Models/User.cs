@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MyIdentity.ViewModels;
+using MyIdentity;
 
 namespace MyIdentity.Models
 {
@@ -22,6 +23,11 @@ namespace MyIdentity.Models
             u.country = newUser.Country;
 
             db.MyUsers.Add(u);
+
+            AspNetUser a = new AspNetUser();
+            var aspUser = db.AspNetUsers.Where(t => t.UserName == newUser.UserName).FirstOrDefault();
+            aspUser.PhoneNumber = newUser.Phone;
+            
             db.SaveChanges();
         }
     }

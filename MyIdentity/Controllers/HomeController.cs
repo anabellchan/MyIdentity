@@ -70,13 +70,14 @@ namespace MyIdentity.Controllers
             {
                 var authenticationManager = HttpContext.Request.GetOwinContext().Authentication;
                 var userIdentity = manager.CreateIdentity(identityUser, DefaultAuthenticationTypes.ApplicationCookie);
+
                 // connect to db and add newUser
                 User user = new User();
                 user.Add(newUser);
 
-                RedirectToAction("Index");
-                //authenticationManager.SignIn(new AuthenticationProperties() { },
-                //                             userIdentity);
+                // go back to login page
+                return RedirectToAction("Index", "Home");
+
 
 
             }
