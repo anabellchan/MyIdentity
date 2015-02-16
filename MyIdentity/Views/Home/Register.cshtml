@@ -1,22 +1,8 @@
 ﻿@model MyIdentity.ViewModels.RegisteredUser
-
 @{
-    Layout = null;
+    ViewBag.Title = "Register";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Register</title>
-</head>
-<body>
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    
-    
     @using (Html.BeginForm()) 
     {
         @Html.AntiForgeryToken()
@@ -108,5 +94,4 @@
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
-</body>
-</html>
+

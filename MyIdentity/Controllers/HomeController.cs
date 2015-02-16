@@ -61,7 +61,7 @@ namespace MyIdentity.Controllers
             var manager = new UserManager<IdentityUser>(userStore);
             var identityUser = new IdentityUser()
             {
-                UserName = newUser.UserName,
+                UserName = newUser.UserName.ToLower(),
                 Email = newUser.Email,
             };
             IdentityResult result = manager.Create(identityUser, newUser.Password);
@@ -72,7 +72,7 @@ namespace MyIdentity.Controllers
                 var userIdentity = manager.CreateIdentity(identityUser, DefaultAuthenticationTypes.ApplicationCookie);
 
                 // connect to db and add newUser
-                User user = new User();
+                UserRepo user = new UserRepo();
                 user.Add(newUser);
 
                 // go back to login page
@@ -91,46 +91,54 @@ namespace MyIdentity.Controllers
         }
 
 
-        //[HttpGet]
-        //public ActionResult AddRole()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public ActionResult AddRole(AspNetRole role)
-        //{
-        //    MyIdentityEntities context = new MyIdentityEntities();
-        //    context.AspNetRoles.Add(role);
-        //    context.SaveChanges();
-        //    return View();
-        //}
+        [HttpGet]
+        public ActionResult CreateRole()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateRole(AspNetRole role)
+        {
+            MyIdentityEntities context = new MyIdentityEntities();
+            role.Name = role.Name.ToLower();
+            context.AspNetRoles.Add(role);
+            context.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
-        //[HttpGet]
-        //public ActionResult AddUserToRole()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public ActionResult AddUserToRole(string userName, string roleName)
-        //{
-        //    MyIdentityEntities context = new MyIdentityEntities();
-        //    AspNetUser user = context.AspNetUsers
-        //                     .Where(u => u.UserName == userName).FirstOrDefault();
-        //    AspNetRole role = context.AspNetRoles
-        //                     .Where(r => r.Name == roleName).FirstOrDefault();
+        [HttpGet]
+        public ActionResult AddUserToRole()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddUserToRole(string userName, string roleName)
+        {
+            MyIdentityEntities context = new MyIdentityEntities();
+            AspNetUser user = context.AspNetUsers
+                             .Where(u => u.UserName == userName.ToLower()).FirstOrDefault();
+            AspNetRole role = context.AspNetRoles
+                             .Where(r => r.Name == roleName.ToLower()).FirstOrDefault();
 
-        //    user.AspNetRoles.Add(role);
-        //    context.SaveChanges();
-        //    return View();
-        //}
+            user.AspNetRoles.Add(role);
+            context.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
-        //[Authorize(Roles = "Admin")]
-        //// To allow more than one role access use syntax like the following:
-        //// [Authorize(Roles="Admin, Staff")]
-        //public ActionResult AdminOnly()
-        //{
-        //    return View();
-        //}
+        [Authorize(Roles = "admin")]
+        // To allow more than one role access use syntax like the following:
+        // [Authorize(Roles="Admin, Staff")]
+        public ActionResult AdminOnly()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "admin, staff")]
+        public ActionResult ViewUserRoles()
+        {
+            UserRepo ur = new UserRepo();
+            return View(ur.AllUsers());
+        }
 
         public ActionResult Logout()
         {

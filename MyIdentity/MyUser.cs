@@ -14,7 +14,7 @@ namespace MyIdentity
     
     public partial class MyUser
     {
-        public int ID { get; set; }
+        public string ID { get; set; }
         public string myUser1 { get; set; }
         public string myEmail { get; set; }
         public string myAddress { get; set; }
