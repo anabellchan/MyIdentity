@@ -187,7 +187,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\UserRepo.cs" />
+    <Compile Include="Models\Admin\RoleRepo.cs" />
+    <Compile Include="Models\Shared\UserRepo.cs" />
     <Compile Include="MyUser.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -220,6 +221,7 @@
     <Content Include="Views\Home\AddUserToRole.cshtml" />
     <Content Include="Views\Home\AdminOnly.cshtml" />
     <Content Include="Views\Home\ViewUserRoles.cshtml" />
+    <Content Include="Views\Home\DeleteUserFromRole.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

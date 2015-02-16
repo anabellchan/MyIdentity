@@ -10,6 +10,8 @@ using System.Web;
 using System.Web.Mvc;
 using MyIdentity.Models;
 using MyIdentity.ViewModels;
+using MyIdentity.Models.Admin;
+//using MyIdentity.Models.Shared;
 
 namespace MyIdentity.Controllers
 {
@@ -90,8 +92,31 @@ namespace MyIdentity.Controllers
             return View();
         }
 
+        [Authorize(Roles = "admin, staff")]
+        public ActionResult ViewUserRoles()
+        {
+            UserRepo ur = new UserRepo();
+            return View(ur.AllUsers());
+        }
+
+        public ActionResult Logout()
+        {
+            var ctx = Request.GetOwinContext();
+            var authenticationManager = ctx.Authentication;
+            authenticationManager.SignOut();
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        [Authorize(Roles = "admin")]
+
+        public ActionResult ModifyUserRole()
+        {
+            return View();
+        }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public ActionResult CreateRole()
         {
             return View();
@@ -105,8 +130,26 @@ namespace MyIdentity.Controllers
             context.SaveChanges();
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        [Authorize(Roles="admin")]
+        public ActionResult DeleteUserFromRole()
+        {
+            RoleRepo roleRepo = new RoleRepo();
+            return View(roleRepo.ListUserRole());
+        }
+        [HttpPost]
+        public ActionResult DeleteUserFromRole(string roleName, string userName)
+        {
+            RoleRepo roleRepo = new RoleRepo();
+            UserRole userRole = new UserRole();
+            userRole.RoleName = roleName;
+            userRole.UserName = userName;
+            roleRepo.DeleteUser(userRole);
+            return RedirectToAction("DeleteUserToRole");
+        }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public ActionResult AddUserToRole()
         {
             return View();
@@ -125,28 +168,8 @@ namespace MyIdentity.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin")]
-        // To allow more than one role access use syntax like the following:
-        // [Authorize(Roles="Admin, Staff")]
-        public ActionResult AdminOnly()
-        {
-            return View();
-        }
 
-        [Authorize(Roles = "admin, staff")]
-        public ActionResult ViewUserRoles()
-        {
-            UserRepo ur = new UserRepo();
-            return View(ur.AllUsers());
-        }
 
-        public ActionResult Logout()
-        {
-            var ctx = Request.GetOwinContext();
-            var authenticationManager = ctx.Authentication;
-            authenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
-        }
     }
 }
 
