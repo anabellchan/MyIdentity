@@ -17,3 +17,4 @@ SELECT * FROM dbo.AspNetRoles
 SELECT * FROM dbo.AspNetUserRoles
 
 select * from dbo.myuser
+

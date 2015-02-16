@@ -85,6 +85,7 @@ namespace MyIdentity.Controllers
         [Authorize]
         public ActionResult Welcome()
         {
+            ViewBag.Logout = false;
             ViewBag.Name = HttpContext.User.Identity.Name;
             
             return View();
@@ -102,7 +103,8 @@ namespace MyIdentity.Controllers
             var ctx = Request.GetOwinContext();
             var authenticationManager = ctx.Authentication;
             authenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            ViewBag.Logout = true;
+            return View();
         }
 
         [HttpGet]

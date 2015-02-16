@@ -28,7 +28,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @{
-                        if (HttpContext.Current.User.IsInRole("Staff")) {
+                        if (@ViewBag.Logout == true)
+                        {
+                            <li><a href="~/Home/Index">Login</a></li>
+                            <li><a href="~/Home/Register">Register</a></li>
+                        }
+                        else if (HttpContext.Current.User.IsInRole("Staff"))
+                        {
                             <li><a href="~/Home/Welcome">Welcome</a></li>
                             <li><a href="~/Home/ViewUserRoles">View Users</a></li>
                             <li><a href="~/Home/Logout">Logout</a></li>
