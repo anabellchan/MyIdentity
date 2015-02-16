@@ -32,25 +32,33 @@ namespace MyIdentity.Models
             db.SaveChanges();
         }
 
-        public IEnumerable<UserDetail> AllUsers() 
+        public IEnumerable<UserDetail> AllUsers()
         {
 
             var users = db.AspNetUsers.ToList();
             List<UserDetail> allUsers = new List<UserDetail>();
 
-            foreach(AspNetUser user in users) {
+            foreach (AspNetUser user in users)
+            {
                 var role = (
                            from u in db.AspNetUsers
                            from r in u.AspNetRoles
                            where u.Id == user.Id
                            select r).FirstOrDefault();
-                
-                
-                
+
+
+
                 var userRec = db.MyUsers.Find(user.Id);
 
                 UserDetail ud = new UserDetail();
-                ud.RoleName = role.Name;
+                if (role != null)
+                {
+                    ud.RoleName = role.Name;
+                }
+                else
+                {
+                    ud.RoleName = "";
+                }
                 ud.UserName = userRec.myUser1;
                 ud.Email = userRec.myEmail;
                 ud.Address = userRec.myAddress;
@@ -62,7 +70,7 @@ namespace MyIdentity.Models
             }
 
             return allUsers;
-        
+
         }
 
     }

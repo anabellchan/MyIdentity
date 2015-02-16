@@ -12,20 +12,21 @@ namespace MyIdentity.Models.Admin
         public void DeleteUser(UserRole userToDelete)
         {
             //var user = db.AspNetUsers.Where(u => u.UserName == userToDelete.UserName).FirstOrDefault();
-            
-            AspNetRole role = (from r in db.AspNetRoles
-                                   where userToDelete.RoleName == r.Name
-                                   select r).FirstOrDefault();
-            AspNetUser user = (from u in db.AspNetUsers
-                                   where userToDelete.UserName == u.UserName
-                                   select u).FirstOrDefault();
 
-            if (role.AspNetUsers.Contains(user)) {
+            AspNetRole role = (from r in db.AspNetRoles
+                               where userToDelete.RoleName == r.Name
+                               select r).FirstOrDefault();
+            AspNetUser user = (from u in db.AspNetUsers
+                               where userToDelete.UserName == u.UserName
+                               select u).FirstOrDefault();
+
+            if (role.AspNetUsers.Contains(user))
+            {
                 role.AspNetUsers.Remove(user);
                 db.SaveChanges();
             }
 
-        
+
         }
 
         public IEnumerable<UserRole> ListUserRole()

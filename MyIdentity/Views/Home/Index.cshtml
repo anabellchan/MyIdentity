@@ -20,7 +20,7 @@
         @Html.AntiForgeryToken()
         
         <div class="form-horizontal">
-            <h1>Login</h1>
+            <h4>Login</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
@@ -44,12 +44,9 @@
                     <input type="submit" value="Login" class="btn btn-default" />
                 </div>
             </div>
-            @Html.ActionLink("Register", "Register")
         </div>
     }
     
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+
 </body>
 </html>

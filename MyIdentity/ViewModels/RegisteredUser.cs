@@ -6,6 +6,7 @@ namespace MyIdentity.ViewModels
     {
         [Required]
         [Display(Name = "User name")]
+        [StringLength(15)]
         public string UserName { get; set; }
 
         [Required]
@@ -15,6 +16,7 @@ namespace MyIdentity.ViewModels
         public string Email { get; set; }
 
         [Display(Name = "Street Address")]
+        [StringLength(50)]
         public string Address { get; set; }
 
         [Display(Name = "Phone")]
@@ -23,14 +25,17 @@ namespace MyIdentity.ViewModels
         public string Phone { get; set; }
 
         [Display(Name = "City")]
+        [StringLength(15)]
 
         public string City { get; set; }
 
         [Display(Name = "State / Province")]
+        [StringLength(15)]
         public string Province { get; set; }
         
         
         [Display(Name = "Country")]
+        [StringLength(15)]
         public string Country { get; set; }
 
         [Required]

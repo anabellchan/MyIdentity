@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,16 +27,38 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    @{
+                        if (HttpContext.Current.User.IsInRole("Staff")) {
+                            <li><a href="~/Home/Welcome">Welcome</a></li>
+                            <li><a href="~/Home/ViewUserRoles">View Users</a></li>
+                            <li><a href="~/Home/Logout">Logout</a></li>
+                        }
+                        else if (HttpContext.Current.User.IsInRole("Admin"))
+                        {
+                            <li><a href="~/Home/Welcome">Welcome</a></li>
+                            <li><a href="~/Home/ViewUserRoles">View Users</a></li>
+                            <li><a href="~/Home/CreateRole">Create Role</a></li>
+                            <li><a href="~/Home/ModifyUserRole">Modify User Roles</a></li>
+                            <li><a href="~/Home/Logout">Logout</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="~/Home/Index">Login</a></li>
+                            <li><a href="~/Home/Register">Register</a></li>
+                        }
+
+}
                
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="container body-content">
+    <div class="container body-content" style="margin-top: 30px">
         @RenderBody()
-        <hr />
-        <footer>
+        
+        <footer style="clear:both">
+            <hr />
             <p>&copy; @DateTime.Now.Year - Anabell C-C</p>
         </footer>
     </div>

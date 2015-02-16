@@ -11,7 +11,7 @@ using System.Web.Mvc;
 using MyIdentity.Models;
 using MyIdentity.ViewModels;
 using MyIdentity.Models.Admin;
-//using MyIdentity.Models.Shared;
+
 
 namespace MyIdentity.Controllers
 {
@@ -79,9 +79,6 @@ namespace MyIdentity.Controllers
 
                 // go back to login page
                 return RedirectToAction("Index", "Home");
-
-
-
             }
             return View();
         }
@@ -89,6 +86,7 @@ namespace MyIdentity.Controllers
         public ActionResult Welcome()
         {
             ViewBag.Name = HttpContext.User.Identity.Name;
+            
             return View();
         }
 
@@ -107,12 +105,38 @@ namespace MyIdentity.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
+        [HttpGet]
         [Authorize(Roles = "admin")]
-
         public ActionResult ModifyUserRole()
         {
             return View();
+        }
+        [HttpPost]
+        public ActionResult ModifyUserRole(string userName, string roleName, String submit)
+        {
+            switch (submit)
+            {
+                case "Create":
+                    MyIdentityEntities context = new MyIdentityEntities();
+                    AspNetUser user = context.AspNetUsers
+                                     .Where(u => u.UserName == userName.ToLower()).FirstOrDefault();
+                    AspNetRole role = context.AspNetRoles
+                                     .Where(r => r.Name == roleName.ToLower()).FirstOrDefault();
+
+                    user.AspNetRoles.Add(role);
+                    context.SaveChanges();
+                    break;
+                case "Delete":
+                    RoleRepo roleRepo = new RoleRepo();
+                    UserRole userRole = new UserRole();
+                    userRole.RoleName = roleName;
+                    userRole.UserName = userName;
+                    roleRepo.DeleteUser(userRole);
+                    break;
+                default:
+                    throw new Exception();
+            }
+            return RedirectToAction("ViewUserRoles");
         }
 
         [HttpGet]
@@ -130,43 +154,7 @@ namespace MyIdentity.Controllers
             context.SaveChanges();
             return RedirectToAction("Index");
         }
-        [HttpGet]
-        [Authorize(Roles="admin")]
-        public ActionResult DeleteUserFromRole()
-        {
-            RoleRepo roleRepo = new RoleRepo();
-            return View(roleRepo.ListUserRole());
-        }
-        [HttpPost]
-        public ActionResult DeleteUserFromRole(string roleName, string userName)
-        {
-            RoleRepo roleRepo = new RoleRepo();
-            UserRole userRole = new UserRole();
-            userRole.RoleName = roleName;
-            userRole.UserName = userName;
-            roleRepo.DeleteUser(userRole);
-            return RedirectToAction("DeleteUserToRole");
-        }
 
-        [HttpGet]
-        [Authorize(Roles = "admin")]
-        public ActionResult AddUserToRole()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult AddUserToRole(string userName, string roleName)
-        {
-            MyIdentityEntities context = new MyIdentityEntities();
-            AspNetUser user = context.AspNetUsers
-                             .Where(u => u.UserName == userName.ToLower()).FirstOrDefault();
-            AspNetRole role = context.AspNetRoles
-                             .Where(r => r.Name == roleName.ToLower()).FirstOrDefault();
-
-            user.AspNetRoles.Add(role);
-            context.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
 
 

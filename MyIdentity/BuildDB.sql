@@ -1,5 +1,7 @@
 drop table MyUser;
+
 CREATE TABLE dbo.MyUser(
+	ID VARCHAR(64) PRIMARY KEY,
 	myUser VARCHAR(256),
 	myEmail VARCHAR(256),
 	myAddress VARCHAR(256),
