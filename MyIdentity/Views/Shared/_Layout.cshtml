@@ -41,6 +41,11 @@
                             <li><a href="~/Home/ModifyUserRole">Modify User Roles</a></li>
                             <li><a href="~/Home/Logout">Logout</a></li>
                         }
+                        else if (HttpContext.Current.User.Identity.IsAuthenticated)
+                        {
+                            <li><a href="~/Home/Welcome">Welcome</a></li>
+                            <li><a href="~/Home/Logout">Logout</a></li>
+                        }
                         else
                         {
                             <li><a href="~/Home/Index">Login</a></li>

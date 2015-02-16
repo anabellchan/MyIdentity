@@ -218,10 +218,9 @@
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\Welcome.cshtml" />
     <Content Include="Views\Home\CreateRole.cshtml" />
-    <Content Include="Views\Home\AddUserToRole.cshtml" />
     <Content Include="Views\Home\ViewUserRoles.cshtml" />
-    <Content Include="Views\Home\DeleteUserFromRole.cshtml" />
     <Content Include="Views\Home\ModifyUserRole.cshtml" />
+    <Content Include="Views\Home\Logout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
